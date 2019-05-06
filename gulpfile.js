@@ -16,6 +16,7 @@ const rename = require('gulp-rename');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const inject = require('gulp-inject-string');
 const cleanCSS = require('gulp-clean-css');
+const fs = require('fs');
 
 gulp.task('bundle', () => {
 
@@ -74,21 +75,24 @@ gulp.task('bundle', () => {
       ]
     }));
 
-    if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "production" || !fs.existsSync('dist/views/partials/scripts.ejs')) {
 
-      return stream
-        .pipe(gulp.dest('./dist/js'))
-        .pipe(notify('Success! The scripts were compiled.'));
+    return stream
+      .pipe(gulp.dest('./dist/js'))
+      .pipe(inject.wrap('<script async>', '</script>'))
+      .pipe(rename('scripts.ejs'))
+      .pipe(notify('Success! The JS was compress to .ejs file'))
+      .pipe(gulp.dest('dist/views/partials'));
 
-    } else {
+  }
 
-      return stream
-        .pipe(inject.wrap('<script async>', '</script>'))
-        .pipe(rename('scripts.ejs'))
-        .pipe(notify('Success! The JS was compress to .ejs file'))
-        .pipe(gulp.dest('dist/views/partials'));
+  if (process.env.NODE_ENV === "development") {
 
-    }
+    return stream
+      .pipe(gulp.dest('./dist/js'))
+      .pipe(notify('Success! The scripts were compiled.'));
+
+  }
 
 })
 
@@ -107,7 +111,7 @@ gulp.task('sass', () => {
 
 });
 
-gulp.task('imagemin', function() {
+gulp.task('imagemin', function () {
   gulp.src('./src/assets/img/**/*')
     .pipe(imagemin([
       imageminMozjpeg({
@@ -120,11 +124,11 @@ gulp.task('imagemin', function() {
 
       imageminSvgo({
         plugins: [{
-            removeViewBox: true
-          },
-          {
-            cleanupIDs: false
-          }
+          removeViewBox: true
+        },
+        {
+          cleanupIDs: false
+        }
         ]
       })
     ]))
@@ -146,7 +150,7 @@ gulp.task('browser-sync', ['nodemon'], function () {
 
 });
 
-gulp.task('nodemon', function(cb) {
+gulp.task('nodemon', function (cb) {
 
   let started = false;
 
@@ -163,7 +167,7 @@ gulp.task('nodemon', function(cb) {
       "./"
     ]
 
-  }).on('start', function() {
+  }).on('start', function () {
 
     if (!started) {
 
