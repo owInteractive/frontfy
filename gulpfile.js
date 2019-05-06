@@ -84,9 +84,7 @@ gulp.task('bundle', () => {
       .pipe(notify('Success! The JS was compress to .ejs file'))
       .pipe(gulp.dest('dist/views/partials'));
 
-  }
-
-  if (process.env.NODE_ENV === "development") {
+  } else if (process.env.NODE_ENV === "development") {
 
     return stream
       .pipe(gulp.dest('./dist/js'))

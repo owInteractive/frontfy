@@ -1,7 +1,7 @@
 {
-  "name": "frontft",
+  "name": "frontfy",
   "version": "1.0.0",
-  "description": "FRONTFY é um scaffold para iniciar projetos front-end.",
+  "description": "Frontfy is a structure for front-end projects. Make with Node.js, Express, Redis and Vue.",
   "main": "index.js",
   "scripts": {
     "gulp": "gulp & gulp webpack",
