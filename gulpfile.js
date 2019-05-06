@@ -75,10 +75,9 @@ gulp.task('bundle', () => {
       ]
     }));
 
-  if (process.env.NODE_ENV === "production" || !fs.existsSync('dist/views/partials/scripts.ejs')) {
+  if (process.env.NODE_ENV === "production") {
 
     return stream
-      .pipe(gulp.dest('./dist/js'))
       .pipe(inject.wrap('<script async>', '</script>'))
       .pipe(rename('scripts.ejs'))
       .pipe(notify('Success! The JS was compress to .ejs file'))
