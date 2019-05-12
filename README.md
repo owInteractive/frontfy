@@ -1,45 +1,45 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# Frontfy
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+Frontfy is a structure for front-end projects. Make with Node.js, Express, Redis and Vue.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+## Usage
 
----
+Prerequisites: Node.js (>=8.x), npm version 3+, Git and Redis 3+.
 
-## Edit a file
+Clone this repository or use our [CLI](https://github.com/owfrontend/frontfy-cli).
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+### Run the project
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+For development, run the command below for the webpack do his job (Change the key NODE_ENV in config/.env to development):
 
----
+```sh
+$ npm run build
+```
 
-## Create a file
+For production, you can run the command below (Change the key NODE_ENV in config/.env to production):
 
-Next, you’ll add a new file to this repository.
+```sh
+$ npm start
+```
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+## Configurations
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+### Project configuration file (config/.env)
 
----
+Access the .env file inside the /config folder. Open it and configure the following properties:
 
-## Clone a repository
+| Key | Value (default) | Description |
+| --- |:-------:|-------------|
+| NODE_ENV | development | Controls the project environment, the values can be development or production|
+| VUE_DEV | true | Controls the browser VueJS plugin |
+| PORT | 8080 | Server port |
+| REDIS_HOST | 127.0.0.1 | IP address of the Redis server |
+| REDIS_PASSWORD | null | If set, client will run Redis auth command on connect.  |
+| REDIS_PORT | 6379 | Port of the Redis server |
+| MAIL_SENDER  | null | When an error occurs in the application an email is sent, put here the sender's email. |
+| MAIL_SENDER_PW  | null | The sender's password |
+| MAIL_RECEIVER  | null | Put here the receiver e-mail |
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+### Panel Authentication
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+The project contains a Redis administration panel. To access this panel you must have a [Firebase Authentication](https://firebase.google.com/docs/auth) user and password. Create a new project in Firebase, inside the Frontfy Project access the file *src/assets/js/services/firebase/config.js* and configure with your exclusive Firebase API Configuration.
