@@ -4,19 +4,19 @@ Frontfy is a structure for front-end projects. Make with Node.js, Express, Redis
 
 ## Usage
 
-Prerequisites: Node.js (>=8.x), npm version 3+, Git and Redis 3+.
+Prerequisites: Node.js (>=8.x), npm version 3+ and Redis 3+.
 
 Clone this repository or use our [CLI](https://github.com/owfrontend/frontfy-cli).
 
 ### Run the project
 
-For development, run the command below for the webpack do his job (Change the key NODE_ENV in config/.env to development):
+For development, run the command below for the webpack do his job (Change the key NODE_ENV in config/.env to **development**):
 
 ```sh
 $ npm run build
 ```
 
-For production, you can run the command below (Change the key NODE_ENV in config/.env to production):
+For production, you can run the command below (Change the key NODE_ENV in config/.env to **production**):
 
 ```sh
 $ npm start
@@ -43,3 +43,8 @@ Access the .env file inside the /config folder. Open it and configure the follow
 ### Panel Authentication
 
 The project contains a Redis administration panel. To access this panel you must have a [Firebase Authentication](https://firebase.google.com/docs/auth) user and password. Create a new project in Firebase, inside the Frontfy Project access the file *src/assets/js/services/firebase/config.js* and configure with your exclusive Firebase API Configuration.
+
+License
+----
+
+[MIT](http://opensource.org/licenses/MIT)
