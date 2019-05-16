@@ -6,7 +6,7 @@ Frontfy is a structure for front-end projects. Make with Node.js, Express, Redis
 
 Prerequisites: Node.js (>=8.x), npm version 3+ and Redis 3+.
 
-Clone this repository or use our [CLI](https://github.com/owInteractive/frontfy-cli.git).
+Clone this repository or use our [CLI](https://github.com/owInteractive/frontfy-cli).
 
 ### Run the project
 
