@@ -16,7 +16,6 @@ const rename = require('gulp-rename');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const inject = require('gulp-inject-string');
 const cleanCSS = require('gulp-clean-css');
-const fs = require('fs');
 
 gulp.task('bundle', () => {
 
