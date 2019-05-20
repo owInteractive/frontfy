@@ -30,6 +30,7 @@ module.exports = {
 
       let packer = new docx.Packer();
       let errors = [];
+      let logsPath = './dist/logs';
 
       client.keys('*', (err, keys) => {
 
@@ -54,6 +55,8 @@ module.exports = {
                   }
 
                   if (i === keys.length - 1) {
+
+                    if (!fs.existsSync(logsPath)) fs.mkdirSync(logsPath);
 
                     const doc = module.exports.init();
                     const dateNow = new Date().toLocaleString().split(' ');
@@ -184,7 +187,7 @@ module.exports = {
 
                         const fileName = `log-error-${date + '_' + time}.docx`;
 
-                        fs.writeFileSync(`./dist/logs/${fileName}`, buffer);
+                        fs.writeFileSync(`${logsPath}/${fileName}`, buffer);
 
                         resolve({
                           status: 200,
