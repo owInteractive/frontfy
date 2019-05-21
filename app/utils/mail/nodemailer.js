@@ -1,22 +1,27 @@
 const nodemailer = require('nodemailer');
-const cache = require('../../db/redis/cache');
 const chalk = require('chalk');
 const logSymbols = require('log-symbols');
+const cache = require('../../db/redis/cache');
 
 module.exports = {
 
+  /**
+   * When an error occur this function dispatch an e-mail to developers
+   * @param {*} request // Request params
+   * @param {*} error // Request error from API
+   */
   send: async (request, error) => {
 
     setTimeout(async () => {
 
       if (process.env.MAIL_SENDER === 'null' || process.env.MAIL_SENDER_PW === 'null') {
 
-        console.log(logSymbols.error, chalk.red('Não é possível enviar o e-mail pois o remetente (MAIL_SENDER) não foi configurado. Acesse config/.env e configure-o.'));
+        console.log(logSymbols.error, chalk.red('The email can not be sent because the sender (MAIL_SENDER) has not been configured. Go to config/.env and configure it.'));
         return false;
 
       } else if (process.env.MAIL_RECEIVER === 'null') {
 
-        console.log(logSymbols.error, chalk.red('Não é possível enviar o e-mail pois o destinatário (MAIL_RECEIVER) não foi configurado. Acesse config/.env e configure-o.'));
+        console.log(logSymbols.error, chalk.red('The email can not be sent because the recipient (MAIL_RECEIVER) has not been configured. Go to config/.env and configure it.'));
         return false;
 
       }
@@ -48,7 +53,9 @@ module.exports = {
             user: process.env.MAIL_SENDER,
             pass: process.env.MAIL_SENDER_PW
           },
-          tls: { rejectUnauthorized: false }
+          tls: {
+            rejectUnauthorized: false
+          }
         });
 
         const mailOptions = {
@@ -73,11 +80,11 @@ module.exports = {
             console.log(logSymbols.success, chalk.green('Dispatch e-mail success: ' + info.response));
 
             await cache.set(cacheKeyword, {
-              'url' : error.url,
-              'data' : error.data,
-              'status' : error.status,
-              'date' : date,
-              'time' : time
+              'url': error.url,
+              'data': error.data,
+              'status': error.status,
+              'date': date,
+              'time': time
             }, 172800);
 
           }
