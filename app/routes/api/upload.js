@@ -3,7 +3,6 @@ const multiparty = require('connect-multiparty')();
 const fs = require('fs');
 const axios = require('axios');
 const formData = require('form-data');
-
 const router = express.Router();
 
 router.post('/upload', multiparty, (req, res) => {

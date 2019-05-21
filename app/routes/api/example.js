@@ -19,7 +19,7 @@ router.get('/users', async (req, res) => {
       keyword: 'analytics', // Cache keyword identifier on Redis (required)
       expireTime: 3600, // Cache expire time (optional)
       watch: true, // Watch the API change (optional)
-      watchTime: 3600 // Watch verification (optional)
+      watchTime: 3600 // Watch verification time (optional)
     }
   });
 
