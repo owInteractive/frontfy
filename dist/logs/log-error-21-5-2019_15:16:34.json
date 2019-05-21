@@ -1,7 +1,0 @@
-[
-    {
-        "key": "request:error:posts",
-        "value": "{\"url\":\"https://jsonplaceholder.typicode.com/aposts\",\"data\":{},\"status\":404,\"date\":\"2019-5-21\",\"time\":\"14:42:29\"}",
-        "expire": 170759
-    }
-]

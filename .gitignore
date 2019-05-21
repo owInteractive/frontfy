@@ -7,6 +7,7 @@ dump.rdb
 dist/css/*.css
 dist/js/*.js
 dist/logs/*.docx
+dist/logs/*.json
 
 # Logs
 *.log
