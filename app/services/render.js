@@ -1,17 +1,23 @@
 const http = require('./http');
 
+/**
+ * Render page
+ * @param {*} req // Express request
+ * @param {*} res // Express response
+ * @param {*} params // Some options to insert inside the express render function
+ */
 const render = async (req, res, params) => {
 
   let extension = ".ejs";
   let opts = {
-    layout: params.layout ? params.layout : 'site/layout', // Layout
-    template: params.page, // Page template
-    title: params.title, // Page title
-    description: params.description, // Page description
-    environment: process.env.NODE_ENV, // Application environment
-    canonical: req.protocol + '://' + req.get('host') + req.originalUrl, // Canonical link
-    data: params.data ? params.data : false, // API data
-    info: params.info ? params.info : false // Extra information
+    layout: params.layout ? params.layout : 'site/layout',
+    template: params.page,
+    title: params.title,
+    description: params.description,
+    environment: process.env.NODE_ENV,
+    canonical: req.protocol + '://' + req.get('host') + req.originalUrl,
+    data: params.data ? params.data : false,
+    info: params.info ? params.info : false
   }
 
   if (!params.data && params.uri) {
