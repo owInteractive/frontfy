@@ -18,7 +18,9 @@ export default () => {
 
       methods: {
 
-        login() {
+        login($event) {
+
+          $event.preventDefault();
 
           const self = this;
 
