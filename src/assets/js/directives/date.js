@@ -13,7 +13,26 @@ Vue.directive('date', {
     let mnts = Math.floor(seconds / 60);
     seconds  -= mnts*60;
 
-    el.innerHTML = Math.abs(days) + " Dias  " + hrs + " horas  " + mnts + " minutos " + seconds + " segundos"
+    let time = [];
+
+    if (Math.abs(days)) {
+      time.push(Math.abs(days) + "d");
+    }
+
+    if (hrs) {
+      time.push(hrs + "h");
+    }
+
+    if (mnts) {
+      time.push(mnts + "m");
+    }
+
+    if (seconds) {
+      time.push(seconds + "s");
+    }
+
+    el.innerHTML = time.join(' ');
 
   }
+
 })

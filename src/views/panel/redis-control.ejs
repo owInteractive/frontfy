@@ -3,7 +3,7 @@
   <input type="hidden" name="data" id="data" value="<%= data %>">
   <input type="hidden" name="info" id="info" value="<%= JSON.stringify(info) %>">
 
-  <div class="container pt-4">
+  <div class="container pt-5">
 
     <div class="row">
       <div class="col-lg-6 d-inline">
@@ -13,15 +13,15 @@
 
     <form action="/panel/keys/flushall" class="form-keys-flushall mt-4" method="POST">
       <button type="button" v-if="!clearAll" class="btn btn-light float-right" @click="toggleClearAll()">
-        <i class="fas fa-skull"></i>&nbsp;&nbsp;Limpar&nbsp;<b> todo </b>&nbsp;cache
+        <i class="fas fa-skull"></i>&nbsp;&nbsp;Clear&nbsp;<b> all </b>&nbsp;the cache
       </button>
       <div v-else class="text-right">
         <button type="submit" name="button" class="btn btn-dark">
-          Sim
+          Yes
         </button>
         &nbsp;&nbsp;
         <button class="btn btn-info" @click="toggleClearAll()">
-          Não
+          No
         </button>
       </div>
     </form>
@@ -30,12 +30,12 @@
       <div class="btn-group" role="group" aria-label="Basic example">
 
         <div class="btn btn-light">
-          <label for="all">Tudo</label>
+          <label for="all">All</label>
           <input id="all" type="radio" name="show" value="all" v-model="view_">
         </div>
 
         <div class="btn btn-light text-danger">
-          <label for="total-erro">Erros: {{total.errors}}</label>
+          <label for="total-erro">Errors: {{total.errors}}</label>
           <input id="total-erro" type="radio" value="error" v-model="view_">
         </div>
 
@@ -45,8 +45,8 @@
         </div>
 
         <div class="btn btn-light text-success" v-if="report.show">
-          <button v-if="!report.loading" type="button" @click="generateReport()" class="btn btn-primary mt-2">Gerar relatório</button>
-          <button v-if="report.loading" type="button" disabled class="btn btn-primary mt-2">Gerando...</button>
+          <button v-if="!report.loading" type="button" @click="generateReport()" class="btn btn-primary mt-2">Generate report</button>
+          <button v-if="report.loading" type="button" disabled class="btn btn-primary mt-2">Wait...</button>
         </div>
       </div>
     </div>
@@ -60,16 +60,16 @@
             <div class="col-lg-2 pt-2 text-center">
 
               <a href="javascript:void(0)" v-if="!show[i]" @click="showOptions(i)" class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i> &nbsp; Remover
+                <i class="fas fa-trash-alt"></i> &nbsp; Remove
               </a>
 
               <div v-show="show[i]">
                 <button type="submit" name="button" class="btn btn-dark">
-                  Sim
+                  Yes
                 </button>
                 &nbsp;&nbsp;
                 <button type="button" class="btn btn-info" @click="showOptions(i)">
-                  Não
+                  No
                 </button>
 
               </div>
@@ -86,7 +86,7 @@
                   </h5>
                   <span style="font-size: 13px;">
                     <i class="fas fa-tombstone"></i>
-                    Atualização em: &nbsp;&nbsp;
+                    Update in: &nbsp;&nbsp;
                     <i class="text-info" v-date :data-expire="key.expire"></i>
                   </span>
                 </div>
@@ -107,7 +107,7 @@
 
     <ul v-else class="list-group text-center">
       <li class="list-group-item list-group-item-light">
-        <p class="mb-0">Não existem chaves!</p>
+        <p class="mb-0">Keys not founded!</p>
       </li>
     </ul>
   </div>
