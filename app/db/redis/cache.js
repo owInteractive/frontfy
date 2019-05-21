@@ -27,6 +27,64 @@ module.exports = {
 
   },
 
+  getAllErrors: () => {
+
+    return new Promise((resolve, reject) => {
+
+      let errors = [];
+
+      client.keys('*', (err, keys) => {
+
+        if (err) {
+          return reject({
+            status: 500,
+            data: err,
+            message: 'Occurred an error'
+          });
+        }
+
+        if (keys) {
+
+          keys.forEach((keyword, i) => {
+
+            client.ttl(keyword, (err, expireTime) => {
+
+              client
+                .getAsync(keyword)
+                .then(response => {
+
+                  if (keyword.match(/request:error:/)) {
+                    errors.push({
+                      'key': keyword,
+                      'value': response,
+                      'expire': expireTime
+                    });
+                  }
+
+                  resolve(errors);
+
+                }).catch((err) => {
+
+                  return reject({
+                    status: 500,
+                    data: err,
+                    message: 'Occurred an error'
+                  });
+
+                });
+
+            });
+
+          });
+
+        }
+
+      });
+
+    });
+
+  },
+
   /**
    * Set cache keyword
    * @param {*} keyword // Redis keyword identifier

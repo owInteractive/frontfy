@@ -11,6 +11,23 @@ export default () => {
 
       data: {
         message: 'Welcome to Frontfy!'
+      },
+
+      mounted() {
+
+        axios
+          .get('/panel/logs/json')
+          .then(response => {
+
+            console.log(response);
+
+          })
+          .catch(error => {
+
+            console.log('Ocorreu um erro ao gerar o documento: ', error);
+
+          });
+
       }
 
     });

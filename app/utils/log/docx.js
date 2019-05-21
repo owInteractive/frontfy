@@ -1,8 +1,8 @@
-const client = require('../../db/redis/connection').connection();
 const docx = require('docx');
 const fs = require('fs');
 const chalk = require('chalk');
 const logSymbols = require('log-symbols');
+const cache = require('../../db/redis/cache');
 
 module.exports = {
 
@@ -11,211 +11,175 @@ module.exports = {
    */
   generate: async () => {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
-      let packer = new docx.Packer();
-      let errors = [];
-      let logsPath = './dist/logs';
+      cache
+        .getAllErrors()
+        .then(errors => {
 
-      client.keys('*', (err, keys) => {
+          let packer = new docx.Packer();
+          let logsPath = './dist/logs';
 
-        if (err) return console.log('get all keys from cache error: ', err);
+          if (!fs.existsSync(logsPath)) fs.mkdirSync(logsPath);
 
-        if (keys) {
+          const doc = module.exports.getDocStyles();
+          const dateNow = new Date().toLocaleString().split(' ');
+          const date = dateNow[0].split('-').reverse().join('-');
+          const time = dateNow[1].replace(/\:/g, '-');
+          const dateTime = date + ' às ' + time;
+          const title = new docx.Paragraph('Relatório de erros gerado em ' + dateTime).heading1().addRun(new docx.TextRun().break());
 
-          keys.forEach((keyword, i) => {
+          doc.addParagraph(title);
 
-            client.ttl(keyword, (err, expireTime) => {
+          errors.forEach(function (key, index) {
 
-              client
-                .getAsync(keyword)
-                .then(response => {
+            const keys = JSON.parse(key.value);
+            const content = new docx.Paragraph();
 
-                  if (keyword.match(/request:error:/)) {
-                    errors.push({
-                      'key': keyword,
-                      'value': response,
-                      'expire': expireTime
-                    });
-                  }
+            if (index === 0) {
+              content.addRun(
+                new docx.TextRun('__________________________________________________________________________________________')
+              )
+            }
 
-                  if (i === keys.length - 1) {
+            content.addRun(
+              new docx.TextRun()
+              .break()
+              .break()
+            )
 
-                    if (!fs.existsSync(logsPath)) fs.mkdirSync(logsPath);
+            content.addRun(
+              new docx.TextRun('Keyword (ID): ')
+              .font("Arial")
+              .size(24)
+              .bold()
+              .break()
+            );
 
-                    const doc = module.exports.getDocStyles();
-                    const dateNow = new Date().toLocaleString().split(' ');
-                    const date = dateNow[0].split('-').reverse().join('-');
-                    const time = dateNow[1];
-                    const dateTime = date + ' às ' + time;
-                    const title = new docx.Paragraph('Relatório de erros gerado em ' + dateTime).heading1().addRun(new docx.TextRun().break());
+            content.addRun(
+              new docx.TextRun(key.key)
+              .font("Arial")
+              .size(24)
+            );
 
-                    doc.addParagraph(title);
+            content.addRun(
+              new docx.TextRun('URL: ')
+              .font("Arial")
+              .size(24)
+              .bold()
+              .break()
+            );
 
-                    errors.forEach(function (key, index) {
+            content.addRun(
+              new docx.TextRun(keys.url)
+              .font("Arial")
+              .size(24)
+            );
 
-                      const keys = JSON.parse(key.value);
-                      const content = new docx.Paragraph();
+            content.addRun(
+              new docx.TextRun('Date: ')
+              .font("Arial")
+              .size(24)
+              .bold()
+              .break()
+            );
 
-                      if (index === 0) {
-                        content.addRun(
-                          new docx.TextRun('__________________________________________________________________________________________')
-                        )
-                      }
+            content.addRun(
+              new docx.TextRun(keys.date + ' as ' + keys.time)
+              .font("Arial")
+              .size(24)
+            );
 
-                      content.addRun(
-                        new docx.TextRun()
-                          .break()
-                          .break()
-                      )
+            content.addRun(
+              new docx.TextRun('Status: ')
+              .font("Arial")
+              .size(24)
+              .bold()
+              .break()
+            );
 
-                      content.addRun(
-                        new docx.TextRun('Keyword (ID): ')
-                          .font("Arial")
-                          .size(24)
-                          .bold()
-                          .break()
-                      );
+            content.addRun(
+              new docx.TextRun(keys.status)
+              .font("Arial")
+              .size(24)
+            );
 
-                      content.addRun(
-                        new docx.TextRun(key.key)
-                          .font("Arial")
-                          .size(24)
-                      );
+            content.addRun(
+              new docx.TextRun('Message: ')
+              .font("Arial")
+              .size(24)
+              .bold()
+              .break()
+            )
 
-                      content.addRun(
-                        new docx.TextRun('URL: ')
-                          .font("Arial")
-                          .size(24)
-                          .bold()
-                          .break()
-                      );
+            content.addRun(
+              new docx.TextRun(JSON.stringify(keys.data))
+              .font("Arial")
+              .size(24)
+            );
 
-                      content.addRun(
-                        new docx.TextRun(keys.url)
-                          .font("Arial")
-                          .size(24)
-                      );
+            content.addRun(
+              new docx.TextRun('Timestamp: ')
+              .font("Arial")
+              .size(24)
+              .bold()
+              .break()
+            )
 
-                      content.addRun(
-                        new docx.TextRun('Date: ')
-                          .font("Arial")
-                          .size(24)
-                          .bold()
-                          .break()
-                      );
+            content.addRun(
+              new docx.TextRun(Date.now())
+              .font("Arial")
+              .size(24)
+            );
 
-                      content.addRun(
-                        new docx.TextRun(keys.date + ' as ' + keys.time)
-                          .font("Arial")
-                          .size(24)
-                      );
+            content.addRun(
+              new docx.TextRun()
+              .break()
+            )
 
-                      content.addRun(
-                        new docx.TextRun('Status: ')
-                          .font("Arial")
-                          .size(24)
-                          .bold()
-                          .break()
-                      );
+            content.addRun(
+              new docx.TextRun('__________________________________________________________________________________________')
+            )
 
-                      content.addRun(
-                        new docx.TextRun(keys.status)
-                          .font("Arial")
-                          .size(24)
-                      );
-
-                      content.addRun(
-                        new docx.TextRun('Message: ')
-                          .font("Arial")
-                          .size(24)
-                          .bold()
-                          .break()
-                      )
-
-                      content.addRun(
-                        new docx.TextRun(JSON.stringify(keys.data))
-                          .font("Arial")
-                          .size(24)
-                      );
-
-                      content.addRun(
-                        new docx.TextRun('Timestamp: ')
-                          .font("Arial")
-                          .size(24)
-                          .bold()
-                          .break()
-                      )
-
-                      content.addRun(
-                        new docx.TextRun(Date.now())
-                          .font("Arial")
-                          .size(24)
-                      );
-
-                      content.addRun(
-                        new docx.TextRun()
-                          .break()
-                      )
-
-                      content.addRun(
-                        new docx.TextRun('__________________________________________________________________________________________')
-                      )
-
-                      doc.addParagraph(content);
-
-                    });
-
-                    packer
-                      .toBuffer(doc)
-                      .then(buffer => {
-
-                        const fileName = `log-error-${date + '_' + time}.docx`;
-
-                        fs.writeFileSync(`${logsPath}/${fileName}`, buffer);
-
-                        resolve({
-                          status: 200,
-                          file: {
-                            buffer: buffer,
-                            name: fileName
-                          },
-                          message: 'Report generated with success!'
-                        });
-
-                      }).catch(err => {
-
-                        console.log(logSymbols.error, chalk.red('Occurred an error on generate the report: ' + err));
-
-                        return reject(new Error({
-                          status: 500,
-                          data: err,
-                          message: 'Occurred an error on generate the report'
-                        }));
-
-                      });
-
-                  }
-
-                }).catch((err) => {
-
-                  console.log(logSymbols.error, chalk.red('Error in get key from redis: ' + err));
-
-                  return reject(new Error({
-                    status: 500,
-                    data: err,
-                    message: 'Occurred an error on generate the report'
-                  }));
-
-                });
-
-            });
+            doc.addParagraph(content);
 
           });
 
-        }
+          packer
+            .toBuffer(doc)
+            .then(buffer => {
 
-      });
+              const fileName = `log-error-${date + '-' + time}.docx`;
+
+              fs.writeFileSync(`${logsPath}/${fileName}`, buffer);
+
+              resolve({
+                status: 200,
+                file: {
+                  buffer: buffer,
+                  name: fileName
+                },
+                message: 'Report generated with success!'
+              });
+
+            }).catch(err => {
+
+              throw new Error(err);
+
+            });
+
+        })
+        .catch(err => {
+
+          console.log(logSymbols.error, chalk.red('Occurred an error on generate the report: ' + err));
+
+          return reject({
+            status: 500,
+            data: err,
+            message: 'Occurred an error on generate the report'
+          });
+
+        });
 
     });
 
@@ -236,7 +200,9 @@ module.exports = {
       .size(28)
       .bold()
       .color("000000")
-      .spacing({ line: 340 })
+      .spacing({
+        line: 340
+      })
 
     return doc;
 

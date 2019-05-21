@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     title: 'Homepage',
     uri: [{
       key: 'posts',
-      url: 'https://jsonplaceholder.typicode.com/posts',
+      url: 'https://jsonplaceholder.typicode.com/aposts',
       req,
       cache: {
         enable: true,

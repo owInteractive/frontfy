@@ -4,6 +4,7 @@ const router = express.Router();
 const client = require('../../db/redis/connection').connection();
 const cache = require('../../db/redis/cache');
 const docx = require('../../utils/log/docx');
+const json = require('../../utils/log/json');
 const fs = require('fs-extra');
 
 /**
@@ -149,6 +150,14 @@ router.get('/keys/values/:key', async (req, res) => {
 router.get('/logs/docx', async (req, res) => {
 
   const response = await docx.generate();
+
+  res.send(response);
+
+});
+
+router.get('/logs/json', async (req, res) => {
+
+  const response = await json.generate();
 
   res.send(response);
 
