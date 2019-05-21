@@ -63,6 +63,7 @@ router.get('/', async (req, res) => {
                 'value': o,
                 'expire': out
               };
+
               return_dataset.push(temp_data);
 
             };

@@ -27,6 +27,9 @@ module.exports = {
 
   },
 
+  /**
+   * Get all errors from Redis
+   */
   getAllErrors: () => {
 
     return new Promise((resolve, reject) => {
@@ -76,6 +79,10 @@ module.exports = {
             });
 
           });
+
+        } else {
+
+          resolve(errors);
 
         }
 
