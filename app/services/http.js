@@ -1,4 +1,3 @@
-// Libraries
 const axios = require('axios');
 const chalk = require('chalk');
 const cache = require('../db/redis/cache');

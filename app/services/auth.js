@@ -2,9 +2,11 @@ module.exports = {
 
   authorizationToken: (req, res) => {
 
-    const token = 'YOUR AUTHORIZATION TOKEN HERE';
+    return new Promise((resolve, reject) => {
 
-    return token ? 'Bearer ' + token : null;
+      resolve('YOUR AUTHORIZATION TOKEN HERE');
+
+    });
 
   }
 

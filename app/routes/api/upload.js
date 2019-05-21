@@ -1,4 +1,3 @@
-// Libraries
 const express = require('express');
 const multiparty = require('connect-multiparty')();
 const fs = require('fs');
