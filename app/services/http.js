@@ -1,12 +1,15 @@
-// Libraries
 const axios = require('axios');
 const chalk = require('chalk');
+const Promise = require("bluebird");
 const cache = require('../db/redis/cache');
 const mail = require('../utils/mail/nodemailer');
-const Promise = require("bluebird");
 
 module.exports = {
 
+  /**
+   * Resolve multiple API requests
+   * @param {*} requests // API endpoints
+   */
   requestAll: async (requests) => {
 
     return await Promise.map(requests, async (request, i) => {
@@ -36,6 +39,10 @@ module.exports = {
 
   },
 
+  /**
+   * Resolve API request
+   * @param {*} params // Request params
+   */
   request: async (params) => {
 
     const keyword = params.cache.keyword || params.uri;
@@ -61,11 +68,13 @@ module.exports = {
         const data = response.data;
 
         if (process.env.NODE_ENV === 'production') {
+
           const requestErrorKeyword = 'request:error:' + keyword;
           const requestErrorInCache = await cache.get(requestErrorKeyword);
 
           if (params.cache) await cache.set(keyword, data, params.cache.expireTime);
           if (requestErrorInCache) await cache.delete(requestErrorKeyword);
+
         }
 
         return data;

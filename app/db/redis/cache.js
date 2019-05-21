@@ -1,23 +1,39 @@
 const client = require('./connection').connection();
-const { parse, stringify } = require('flatted/cjs');
+const {
+  parse,
+  stringify
+} = require('flatted/cjs');
 
 module.exports = {
 
+  /**
+   * Get cache keyword
+   * @param {*} keyword // Redis keyword identifier
+   * @param {*} request // Request information from client
+   */
   get: async (keyword, request) => {
+
     return await client
       .getAsync(keyword)
       .then(async (response) => {
 
         if (request) module.exports.update(keyword, request);
+        if (response) return JSON.parse(response);
 
-        return response ? JSON.parse(response) : false;
+        return false;
 
       })
-      .catch((err) => err)
+      .catch((err) => err);
 
   },
 
-  set: (keyword, data, expireTime = 2000) => {
+  /**
+   * Set cache keyword
+   * @param {*} keyword // Redis keyword identifier
+   * @param {*} data // Redis data
+   * @param {number} [expireTime=3600] // Keyword expire time in seconds, defaults to 3600 (~1hr)
+   */
+  set: (keyword, data, expireTime = 3600) => {
 
     client.set(keyword, JSON.stringify(data));
     client.expire(keyword, expireTime);
@@ -26,10 +42,11 @@ module.exports = {
 
   },
 
-  info: () => {
-    return client.server_info;
-  },
-
+  /**
+   * Update cache keyword
+   * @param {*} keyword // Redis keyword identifier
+   * @param {*} request // Request information from client
+   */
   update: async (keyword, request) => {
 
     setTimeout(async () => {
@@ -111,12 +128,21 @@ module.exports = {
 
   },
 
+  /**
+   * Delete cache keyword
+   * @param {*} keyword // Redis keyword identifier
+   */
   delete: (keyword) => {
 
     return client.del(keyword, (err, response) => {
       return response == 1 ? true : false;
     });
 
-  }
+  },
+
+  /**
+   * Redis information
+   */
+  info: () => client.server_info
 
 }

@@ -6,8 +6,9 @@ const cache = require('../../db/redis/cache');
 const docx = require('../../utils/log/docx');
 const fs = require('fs-extra');
 
-/* Pages */
-/*---------------------------*/
+/**
+ * Panel pages
+ */
 router.get('/auth', async (req, res) => {
 
   render(req, res, {
@@ -52,9 +53,15 @@ router.get('/', async (req, res) => {
 
             i++;
 
-            if (e) { console.log(e) } else {
+            if (e) {
+              console.log(e)
+            } else {
 
-              temp_data = { 'key': l, 'value': o, 'expire': out };
+              temp_data = {
+                'key': l,
+                'value': o,
+                'expire': out
+              };
               return_dataset.push(temp_data);
 
             };
@@ -109,12 +116,13 @@ router.get('/logs', (req, res) => {
 
 });
 
-/* Route methods */
-/*---------------------------*/
+/**
+ * Panel methods
+ */
 router.post('/keys/flush/:key', async (req, res) => {
-  var key = req.params.key.replace(/__/g, '/');
+  const key = req.params.key.replace(/__/g, '/');
   cache.delete(key);
-  res.redirect('/panel?message=Chave deletada do Redis');
+  res.redirect('/panel?message=Key removed from Redis!');
 });
 
 router.post('/keys/flushall', async (req, res) => {
@@ -126,7 +134,7 @@ router.post('/keys/flushall', async (req, res) => {
     }
   });
 
-  res.redirect('/panel?message=Todas as chaves removidas');
+  res.redirect('/panel?message=All keys have been removed!');
 
 });
 
@@ -149,8 +157,8 @@ router.get('/logs/docx', async (req, res) => {
 router.post('/logs/delete', (req, res) => {
   fs.unlink('dist/logs/' + req.body.name, (err) => {
     if (err) throw err;
-    res.redirect('/panel/logs?message=Arquivo de log deletado com sucesso!');
+    res.redirect('/panel/logs?message=Log removed with success!');
   });
-})
+});
 
 module.exports = router;

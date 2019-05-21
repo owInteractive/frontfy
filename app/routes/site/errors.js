@@ -7,7 +7,7 @@ router.get('/404', (req, res) => {
 
   render(req, res, {
     page: '404',
-    title: 'Página não encontrada!'
+    title: 'Page not founded!'
   });
 
 });
@@ -16,7 +16,7 @@ router.get('/500', (req, res) => {
 
   render(req, res, {
     page: '500',
-    title: 'Ocorreu um erro interno, por favor, tente novamente mais tarde!'
+    title: 'Internal error, try again later.'
   });
 
 });
@@ -31,7 +31,7 @@ router.use(function (req, res, next) {
 
 router.use(function (err, req, res, next) {
 
-  console.log('Error 500: ', err);
+  console.log('500 error: ', err);
 
   if (process.env.NODE_ENV === 'production') {
 
@@ -41,7 +41,7 @@ router.use(function (err, req, res, next) {
     }
 
     const mailError = {
-      url: 'URL não especificada',
+      url: 'URL not specified',
       status: 500,
       data: err.stack
     }

@@ -6,24 +6,9 @@ const logSymbols = require('log-symbols');
 
 module.exports = {
 
-  init: () => {
-
-    const doc = new docx.Document();
-
-    doc.Styles.createParagraphStyle("Heading1", "Heading 1")
-      .basedOn("Normal")
-      .next("Normal")
-      .quickFormat()
-      .font("Arial")
-      .size(28)
-      .bold()
-      .color("000000")
-      .spacing({ line: 340 })
-
-    return doc;
-
-  },
-
+  /**
+   * Generate error log
+   */
   generate: async () => {
 
     return new Promise((resolve, reject) => {
@@ -58,7 +43,7 @@ module.exports = {
 
                     if (!fs.existsSync(logsPath)) fs.mkdirSync(logsPath);
 
-                    const doc = module.exports.init();
+                    const doc = module.exports.getDocStyles();
                     const dateNow = new Date().toLocaleString().split(' ');
                     const date = dateNow[0].split('-').reverse().join('-');
                     const time = dateNow[1];
@@ -195,17 +180,17 @@ module.exports = {
                             buffer: buffer,
                             name: fileName
                           },
-                          message: 'Relatório gerado com sucesso!'
+                          message: 'Report generated with success!'
                         });
 
                       }).catch(err => {
 
-                        console.log(logSymbols.error, chalk.red('Log generate error: ' + err));
+                        console.log(logSymbols.error, chalk.red('Occurred an error on generate the report: ' + err));
 
                         return reject(new Error({
                           status: 500,
                           data: err,
-                          message: 'Erro ao salvar o relatório!'
+                          message: 'Occurred an error on generate the report'
                         }));
 
                       });
@@ -219,7 +204,7 @@ module.exports = {
                   return reject(new Error({
                     status: 500,
                     data: err,
-                    message: 'Erro ao salvar o relatório!'
+                    message: 'Occurred an error on generate the report'
                   }));
 
                 });
@@ -233,6 +218,27 @@ module.exports = {
       });
 
     });
+
+  },
+
+  /**
+   * Get the docx styles
+   */
+  getDocStyles: () => {
+
+    const doc = new docx.Document();
+
+    doc.Styles.createParagraphStyle("Heading1", "Heading 1")
+      .basedOn("Normal")
+      .next("Normal")
+      .quickFormat()
+      .font("Arial")
+      .size(28)
+      .bold()
+      .color("000000")
+      .spacing({ line: 340 })
+
+    return doc;
 
   }
 
