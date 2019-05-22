@@ -124,7 +124,7 @@ router.get('/logs', (req, res) => {
 router.post('/keys/flush/:key', async (req, res) => {
   const key = req.params.key.replace(/__/g, '/');
   cache.delete(key);
-  res.redirect('/panel?message=Key removed from Redis!');
+  res.redirect('/panel?success=Key removed from Redis!');
 });
 
 router.post('/keys/flushall', async (req, res) => {
@@ -136,7 +136,7 @@ router.post('/keys/flushall', async (req, res) => {
     }
   });
 
-  res.redirect('/panel?message=All keys have been removed!');
+  res.redirect('/panel?success=All keys have been removed!');
 
 });
 
@@ -167,7 +167,7 @@ router.get('/logs/json', async (req, res) => {
 router.post('/logs/delete', (req, res) => {
   fs.unlink('dist/logs/' + req.body.name, (err) => {
     if (err) throw err;
-    res.redirect('/panel/logs?message=Log removed with success!');
+    res.redirect('/panel/logs?success=Log removed with success!');
   });
 });
 

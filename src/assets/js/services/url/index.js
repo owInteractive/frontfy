@@ -1,4 +1,4 @@
-export const getQuery = (parameter) => {
+export const getQueryParam = (parameter) => {
 
   let local = location.search.substring(1, location.search.length);
   let value = false;
@@ -21,7 +21,7 @@ export const getQuery = (parameter) => {
 
 }
 
-export const updateQuery = (oldval, newval) => {
+export const updateQueryParam = (oldval, newval) => {
 
   let search = location.search;
   let regex = new RegExp("([?;&])" + oldval + "[^&;]*[;&]?");
@@ -31,8 +31,9 @@ export const updateQuery = (oldval, newval) => {
 
 }
 
-export const removeQuery = (url, parameter) => {
+export const removeQueryParam = (parameter) => {
 
+  let url = window.location.href;
   let urlparts = url.split('?');
 
   if (urlparts.length >= 2) {
@@ -48,7 +49,11 @@ export const removeQuery = (url, parameter) => {
 
     }
 
-    return urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
+    let result = urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
+
+    window.history.pushState('', document.title, result);
+
+    return result;
 
   }
 
