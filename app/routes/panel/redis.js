@@ -4,6 +4,7 @@ const router = express.Router();
 const client = require('../../db/redis/connection').connection();
 const cache = require('../../db/redis/cache');
 const docx = require('../../utils/log/docx');
+const json = require('../../utils/log/json');
 const fs = require('fs-extra');
 
 /**
@@ -62,6 +63,7 @@ router.get('/', async (req, res) => {
                 'value': o,
                 'expire': out
               };
+
               return_dataset.push(temp_data);
 
             };
@@ -122,7 +124,7 @@ router.get('/logs', (req, res) => {
 router.post('/keys/flush/:key', async (req, res) => {
   const key = req.params.key.replace(/__/g, '/');
   cache.delete(key);
-  res.redirect('/panel?message=Key removed from Redis!');
+  res.redirect('/panel?success=Key removed from Redis!');
 });
 
 router.post('/keys/flushall', async (req, res) => {
@@ -134,7 +136,7 @@ router.post('/keys/flushall', async (req, res) => {
     }
   });
 
-  res.redirect('/panel?message=All keys have been removed!');
+  res.redirect('/panel?success=All keys have been removed!');
 
 });
 
@@ -154,10 +156,18 @@ router.get('/logs/docx', async (req, res) => {
 
 });
 
+router.get('/logs/json', async (req, res) => {
+
+  const response = await json.generate();
+
+  res.send(response);
+
+});
+
 router.post('/logs/delete', (req, res) => {
   fs.unlink('dist/logs/' + req.body.name, (err) => {
     if (err) throw err;
-    res.redirect('/panel/logs?message=Log removed with success!');
+    res.redirect('/panel/logs?success=Log removed with success!');
   });
 });
 

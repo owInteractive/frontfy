@@ -7,6 +7,10 @@ window.$ = jquery;
 
 require("jquery-validation");
 
+/* Services */
+/*---------------------------*/
+require('./services/alerts');
+
 /* Directives */
 /*---------------------------*/
 require('./directives/date');
